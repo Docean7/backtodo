@@ -12,11 +12,12 @@ const getAllTodos = async (req, res) => {
 const addTodo = async (req, res) => {
     const {text} = req.body;
     try {
-        await TodoItem.create({
+        let createdTodo = await TodoItem.create({
             text,
             userId: req.user.id
-        });
-        getAllTodos(req, res)
+        }).then(todo => todo.get({ plain: true }));
+        res.send(createdTodo);
+
     } catch (e) {
         console.log(e);
     }
